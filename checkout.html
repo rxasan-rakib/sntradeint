@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | SN Trade International</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Slick Slider CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+    <link rel="stylesheet" type="text/css"
+        href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .checkout-container {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        .checkout-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+            margin-bottom: 30px;
+        }
+        .checkout-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: #333;
+            border-left: 5px solid #00B159;
+            padding-left: 15px;
+        }
+        .order-summary-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+            border: 1px solid #eee;
+            position: sticky;
+            top: 100px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+        }
+        .payment-option {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            position: relative;
+        }
+        .payment-option:hover {
+            border-color: #00B159;
+            box-shadow: 0 4px 15px rgba(0, 177, 89, 0.08);
+        }
+        .payment-option.active {
+            border-color: #00B159;
+            background: #f0fff4;
+            border-width: 2px;
+        }
+        .payment-option input {
+            display: none;
+        }
+        .payment-option .custom-radio {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            margin-right: 15px;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        .payment-option.active .custom-radio {
+            border-color: #00B159;
+        }
+        .payment-option.active .custom-radio::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background: #00B159;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .payment-logo {
+            height: 30px;
+            width: auto;
+            object-fit: contain;
+        }
+        .payment-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        @media (max-width: 576px) {
+            .payment-methods-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .method-card {
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+        .method-card:hover {
+            border-color: #00B159;
+            background: #f9fffb;
+            transform: translateY(-3px);
+        }
+        .method-card.active {
+            border-color: #00B159;
+            background: #f0fff4;
+            box-shadow: 0 8px 20px rgba(0, 177, 89, 0.1);
+        }
+        .method-card .check-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #00B159;
+            font-size: 1.2rem;
+            display: none;
+        }
+        .method-card.active .check-icon {
+            display: block;
+        }
+        .method-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #333;
+        }
+        .payment-details-wrapper {
+            background-color: #fff;
+            border: 1px solid #eee;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .payment-details-header {
+            background: #f8fbf9;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .pay-type-toggle {
+            display: flex;
+            background: #eee;
+            padding: 4px;
+            border-radius: 8px;
+            gap: 4px;
+        }
+        .pay-type-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #666;
+            transition: all 0.2s;
+        }
+        .pay-type-btn.active {
+            background: #fff;
+            color: #00B159;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .transfer-info {
+            padding: 25px;
+            text-align: center;
+        }
+        .amount-display {
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: #00B159;
+            letter-spacing: -1px;
+            margin: 10px 0;
+        }
+        .merchant-number-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background: #f0fff4;
+            border: 1px dashed #00B159;
+            border-radius: 50px;
+            color: #00B159;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .payment-inputs {
+            padding: 0 25px 25px;
+        }
+        .payment-inputs .form-control {
+            border: 1.5px solid #eee;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+        }
+        .payment-inputs .form-control:focus {
+            border-color: #00B159;
+            box-shadow: none;
+            background: #f9fffb;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1. TOP BAR -->
+    <div class="top-bar">
+        <div class="container text-center text-lg-end">
+            <span class="text-muted">Helpline +880 1835 522503</span>
+        </div>
+    </div>
+
+    <!-- 2. HEADER SECTION -->
+    <header class="sticky-top shadow-sm bg-white">
+        <!-- Middle Header: Logo & Search -->
+        <div class="middle-header py-3">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 col-6">
+                        <a href="index.html" class="navbar-brand">
+                            <img src="assets/logo.png" alt="Logo" class="img-fluid" style="height: 40px;">
+                        </a>
+                    </div>
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <div class="search-box mx-auto">
+                            <input type="text" placeholder="I am shopping for...">
+                            <i class="fas fa-search search-icon"></i>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-6 text-end">
+                        <div class="user-auth d-flex justify-content-end align-items-center gap-2">
+                            <i class="far fa-user fs-5 text-muted d-none d-md-block"></i>
+                            <a href="login.html"
+                                class="d-none d-md-block text-decoration-none text-dark small fw-bold">Login</a>
+                            <span class="text-muted d-none d-md-block">|</span>
+                            <a href="registration.html"
+                                class="d-none d-md-block text-decoration-none text-dark small fw-bold">Registration</a>
+                            <button class="btn d-lg-none p-0 ms-3" data-bs-toggle="offcanvas"
+                                data-bs-target="#mobileMenu">
+                                <i class="fas fa-bars fs-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Navigation Bar -->
+        <nav class="main-nav">
+            <div class="container">
+                <div class="d-flex align-items-stretch">
+                    <!-- Categories Dropdown -->
+                    <div class="dropdown h-100 d-none d-lg-block">
+                        <div class="cat-block" data-bs-toggle="dropdown">
+                            <i class="fas fa-bars me-2"></i>
+                            <a href="categories.html" class="text-white text-decoration-none">Categories (See All)</a>
+                            <i class="fas fa-chevron-down ms-auto small opacity-50"></i>
+                        </div>
+                        <ul class="dropdown-menu border-0 shadow-lg rounded-0 mt-0 w-100">
+                            <li><a class="dropdown-item py-2 px-4 border-bottom" href="category.html">Beauty &
+                                    Health</a></li>
+                            <li><a class="dropdown-item py-2 px-4 border-bottom" href="category.html">Baby Food &
+                                    Care</a></li>
+                            <li><a class="dropdown-item py-2 px-4 border-bottom" href="category.html">Organic Zone</a>
+                            </li>
+                            <li><a class="dropdown-item py-2 px-4" href="category.html">Food</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Nav Links -->
+                    <ul class="nav-links d-none d-lg-flex">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="category.html">Beauty & Health</a></li>
+                        <li><a href="category.html">Fashion & Lifestyle</a></li>
+                        <li><a href="category.html">Baby Food & Care</a></li>
+                        <li><a href="category.html">Food</a></li>
+                    </ul>
+
+                    <!-- Cart Summary -->
+                    <div class="cart-block ms-auto" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas"
+                        style="cursor: pointer;">
+                        <i class="fas fa-shopping-cart me-2 fs-5"></i>
+                        <span class="d-none">৳5,200.00 (1 Items)</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- 2. Checkout Content -->
+    <section class="checkout-container">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <!-- Shipping Info -->
+                    <div class="checkout-card">
+                        <h5 class="checkout-title">Shipping Information</h5>
+                        <form>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Full Name *</label>
+                                    <input type="text" class="form-control" placeholder="Enter your full name" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Phone Number *</label>
+                                    <input type="tel" class="form-control" placeholder="+880 1XXX XXXXXX" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold">Full Address *</label>
+                                    <textarea class="form-control" rows="3" placeholder="House no, Street name, Area, City" required></textarea>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">District *</label>
+                                    <select class="form-select">
+                                        <option selected>Select District</option>
+                                        <option>Dhaka</option>
+                                        <option>Chittagong</option>
+                                        <option>Sylhet</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold">Area / Thana *</label>
+                                    <input type="text" class="form-control" placeholder="Enter area name">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-card p-4">
+                        <h5 class="checkout-title">Select Payment Method</h5>
+                        
+                        <div class="payment-methods-grid">
+                            <div class="method-card active" onclick="selectNewPayment('cod', this)">
+                                <i class="fas fa-check-circle check-icon"></i>
+                                <i class="fas fa-money-bill-wave fs-2 text-success"></i>
+                                <span class="method-name">Cash on Delivery</span>
+                            </div>
+                            <div class="method-card" onclick="selectNewPayment('bkash', this)">
+                                <i class="fas fa-check-circle check-icon"></i>
+                                <img src="assets/bkash.png" alt="bKash" class="payment-logo">
+                                <span class="method-name">bKash</span>
+                            </div>
+                            <div class="method-card" onclick="selectNewPayment('nagad', this)">
+                                <i class="fas fa-check-circle check-icon"></i>
+                                <img src="assets/nagad.png" alt="Nagad" class="payment-logo">
+                                <span class="method-name">Nagad</span>
+                            </div>
+                            <div class="method-card" onclick="selectNewPayment('rocket', this)">
+                                <i class="fas fa-check-circle check-icon"></i>
+                                <img src="assets/rocket.png" alt="Rocket" class="payment-logo">
+                                <span class="method-name">Rocket</span>
+                            </div>
+                        </div>
+
+                        <!-- Dynamic Payment Details -->
+                        <div id="paymentDetailsSection" class="payment-details-wrapper" style="display: none;">
+                            <div class="payment-details-header d-flex justify-content-between align-items-center">
+                                <span class="small fw-bold text-muted">TRANSACTION DETAILS</span>
+                                <div class="pay-type-toggle">
+                                    <button type="button" class="pay-type-btn active" onclick="togglePayAmount('full', this)">Full Payment</button>
+                                    <button type="button" class="pay-type-btn" onclick="togglePayAmount('delivery', this)">Delivery Only</button>
+                                </div>
+                            </div>
+                            
+                            <div class="transfer-info">
+                                <span class="small text-muted text-uppercase fw-bold">Please Send Money</span>
+                                <div class="amount-display" id="dynamicAmount">৳5,260.00</div>
+                                <div class="merchant-number-box">
+                                    <i class="fas fa-phone-alt small"></i>
+                                    <span id="merchantNumber">01835522503</span>
+                                    <i class="far fa-copy ms-2" style="cursor: pointer;" onclick="copyNumber()"></i>
+                                </div>
+                                <p class="small text-muted mb-0"><i class="fas fa-info-circle me-1"></i> Send money to the number above and enter details below.</p>
+                            </div>
+
+                            <div class="payment-inputs">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">Sender Number</label>
+                                        <input type="text" class="form-control" id="senderNumber" placeholder="e.g. 017XXXXXXXX">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label small fw-bold text-muted">Transaction ID (TrxID)</label>
+                                        <input type="text" class="form-control" id="trxId" placeholder="e.g. 8N7X6W5V4U">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Notes -->
+                    <div class="checkout-card">
+                        <h5 class="checkout-title">Order Notes (Optional)</h5>
+                        <textarea class="form-control" rows="2" placeholder="Notes about your order, e.g. special delivery instructions."></textarea>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Order Summary -->
+                    <div class="order-summary-card">
+                        <h5 class="fw-bold mb-4">Order Summary</h5>
+                        
+                        <!-- Item List (Simulated) -->
+                        <div class="d-flex align-items-center mb-4 border-bottom pb-3">
+                            <img src="assets/skincare_1.png" alt="Item" class="rounded border p-1 me-3" style="width: 50px; height: 50px; object-fit: contain;">
+                            <div class="flex-grow-1">
+                                <h6 class="small fw-bold mb-0">The Ordinary Soothing Serum</h6>
+                                <span class="text-muted small">1 x ৳5,200.00</span>
+                            </div>
+                            <span class="fw-bold small">৳5,200.00</span>
+                        </div>
+
+                        <div class="summary-item">
+                            <span class="text-muted">Subtotal</span>
+                            <span class="fw-bold">৳5,200.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="text-muted">Shipping Fee</span>
+                            <span class="fw-bold">৳60.00</span>
+                        </div>
+                        <div class="summary-item">
+                            <span class="text-muted">Tax / VAT</span>
+                            <span class="fw-bold">৳0.00</span>
+                        </div>
+
+                        <!-- Coupon Section -->
+                        <div class="mt-4 mb-4 pt-4 border-top">
+                            <label class="form-label small fw-bold text-muted">Have a coupon?</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Enter coupon code" id="couponCode" style="border-radius: 8px 0 0 8px; font-size: 0.9rem;">
+                                <button class="btn btn-dark fw-bold px-3" type="button" style="border-radius: 0 8px 8px 0; font-size: 0.85rem;" onclick="applyCoupon()">Apply</button>
+                            </div>
+                            <div id="couponMessage" class="small mt-2" style="display: none;"></div>
+                        </div>
+
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold mb-0">Total</h5>
+                            <h4 class="fw-bold text-success mb-0">৳5,260.00</h4>
+                        </div>
+
+                        <button class="btn btn-success w-100 py-3 fw-bold rounded-1 border-0" style="background-color: #00B159;" onclick="showOrderSuccess()">
+                            PLACE ORDER NOW <i class="fas fa-arrow-right ms-2"></i>
+                        </button>
+                        
+                        <p class="text-center text-muted small mt-3 mb-0">
+                            By placing an order, you agree to our <a href="terms.html" class="text-success">Terms & Conditions</a>.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. FOOTER -->
+    <footer class="footer-main">
+        <div class="container text-center text-md-start">
+            <div class="row g-5">
+                <!-- Brand Info -->
+                <div class="col-lg-4 col-md-6">
+                    <img src="assets/logo.png" alt="Logo" style="height: 40px;" class="mb-4">
+                    <p class="small opacity-75">SN Trade International is a trusted global sourcing partner for premium
+                        beauty, food, and lifestyle products.</p>
+                    <div class="social-icons d-flex justify-content-center justify-content-md-start gap-2">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h5 class="footer-title">QUICK LINKS</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="about.html">About Us</a></li>
+                        <li class="mb-2"><a href="contact.html">Contact Us</a></li>
+                        <li class="mb-2"><a href="privacy.html">Privacy Policy</a></li>
+                        <li class="mb-2"><a href="terms.html">Terms & Conditions</a></li>
+                        <li class="mb-2"><a href="payment.html">Payment Policy</a></li>
+                        <li class="mb-2"><a href="return-policy.html">Return Policy</a></li>
+                        <li class="mb-2"><a href="cookie.html">Cookie Policy</a></li>
+                    </ul>
+                </div>
+
+                <!-- My Account -->
+                <div class="col-lg-2 col-md-3 col-6">
+                    <h5 class="footer-title">MY ACCOUNT</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="login.html">Login</a></li>
+                        <li class="mb-2"><a href="purchase-history.html">Order History</a></li>
+                        <li class="mb-2"><a href="wishlist.html">My Wishlist</a></li>
+                        <li class="mb-2"><a href="track-order.html">Track Order</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contacts -->
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="footer-title">CONTACTS</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-3 d-flex align-items-start justify-content-center justify-content-md-start">
+                            <i class="fas fa-map-marker-alt text-success me-3 mt-1"></i>
+                            <span class="small">57/8 (4th floor) East Razabazer west Panthapath, Dhaka -1215.</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+                            <i class="fas fa-phone-alt text-success me-3"></i>
+                            <span class="small">+8801835522503</span>
+                        </li>
+                        <li class="mb-3 d-flex align-items-center justify-content-center justify-content-md-start">
+                            <i class="fas fa-envelope text-success me-3"></i>
+                            <span class="small">info@sntradeint.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer -->
+            <div
+                class="border-top border-secondary mt-5 pt-4 d-flex flex-wrap justify-content-center justify-content-md-between align-items-center text-center text-md-start">
+                <p class="small mb-3 mb-md-0 opacity-75">Copyright © 2025 | All rights reserved by SN Trade | Development By
+                    Creative System Limited.</p>
+                <div class="payment-icons d-flex gap-3 fs-3 text-secondary justify-content-center">
+                    <i class="fab fa-cc-paypal" title="PayPal"></i>
+                    <i class="fab fa-cc-visa" title="Visa"></i>
+                    <i class="fab fa-cc-mastercard" title="MasterCard"></i>
+                    <i class="fab fa-cc-discover" title="Discover"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 11. MODALS SECTION -->
+
+    <!-- Quick View / Add to Cart Modal -->
+    <div class="modal fade" id="quickViewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 950px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+                <button type="button"
+                    class="btn-close position-absolute top-0 start-100 translate-middle rounded-circle shadow-sm"
+                    data-bs-dismiss="modal" aria-label="Close"
+                    style="z-index: 1050; background-color: #dcdcdc; opacity: 1; padding: 0.8rem;"></button>
+                <div class="modal-body p-4 p-md-5">
+                    <div class="row g-4">
+                        <!-- Images -->
+                        <div class="col-md-6 d-flex gap-3">
+                            <div class="d-flex flex-column gap-2">
+                                <div class="border border-2 border-success p-1"
+                                    style="width: 70px; height: 70px; cursor: pointer;">
+                                    <img src="assets/skincare_1.png" class="img-fluid h-100 w-100"
+                                        style="object-fit: contain;" alt="Thumb">
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 d-flex align-items-center justify-content-center p-3">
+                                <img src="assets/skincare_1.png" class="img-fluid" alt="Product"
+                                    style="max-height: 350px;">
+                            </div>
+                        </div>
+
+                        <!-- Details -->
+                        <div class="col-md-6">
+                            <h5 class="fw-bold mb-4 text-dark" style="font-size: 1.15rem; line-height: 1.5;">The
+                                Ordinary Soothing & Barrier Support Serum 30ml</h5>
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="text-muted" style="width: 100px;">Price</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="fs-4 fw-bold text-success">৳5,200.00</span>
+                                    <span class="text-muted text-decoration-line-through small">৳5,500.00 /pcs</span>
+                                    <span class="badge bg-success rounded-1">-5%</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="text-muted" style="width: 100px;">Quantity</span>
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="d-flex align-items-center bg-light rounded-1" style="padding: 2px;">
+                                        <button class="btn btn-sm text-muted border-0 fw-bold px-3 btn-minus"
+                                            type="button" style="background: none;">&minus;</button>
+                                        <input type="text"
+                                            class="form-control form-control-sm text-center border-0 bg-transparent fw-bold px-0 qty-input"
+                                            value="1" style="width: 35px; box-shadow: none;">
+                                        <button class="btn btn-sm text-muted border-0 fw-bold px-3 btn-plus"
+                                            type="button" style="background: none;">&plus;</button>
+                                    </div>
+                                    <span class="text-muted small">(2 available)</span>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center mb-4">
+                                <span class="text-muted" style="width: 100px;">Total Price</span>
+                                <span class="fs-4 fw-bold text-success total-price">৳5,200.00</span>
+                            </div>
+                            <button class="btn btn-success px-4 py-2 fw-bold rounded-1 border-0"
+                                style="background-color: #00B159;" data-bs-toggle="modal"
+                                data-bs-target="#cartSuccessModal" data-bs-dismiss="modal">
+                                <i class="fas fa-cart-plus me-2"></i> Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Success Modal -->
+    <div class="modal fade" id="cartSuccessModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 600px;">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 8px;">
+                <button type="button"
+                    class="btn-close position-absolute top-0 start-100 translate-middle rounded-circle shadow-sm"
+                    data-bs-dismiss="modal" aria-label="Close"
+                    style="z-index: 1050; background-color: #dcdcdc; opacity: 1; padding: 0.8rem;"></button>
+                <div class="modal-body p-4 p-md-5 text-center">
+                    <i class="fas fa-cart-plus mb-3" style="font-size: 3.5rem; color: #00B159;"></i>
+                    <h3 class="fw-bold mb-4" style="color: #00B159;">Item added to your cart!</h3>
+                    <div class="d-flex align-items-center text-start mb-5 mx-auto" style="max-width: 450px;">
+                        <img src="assets/skincare_1.png" alt="Product" class="img-fluid me-4 border p-1"
+                            style="width: 80px; height: 80px; object-fit: contain;">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-2" style="line-height: 1.4;">The Ordinary Soothing & Barrier
+                                Support Serum 30ml</h6>
+                            <div class="d-flex align-items-center mt-2">
+                                <span class="text-muted" style="width: 60px;">Price</span>
+                                <span class="fs-5 fw-bold text-success total-price-success">৳5,200.00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center gap-3 mx-auto" style="max-width: 450px;">
+                        <button class="btn text-white fw-bold py-2 flex-grow-1" data-bs-dismiss="modal"
+                            style="background-color: #FFB300; border-radius: 4px;">Back to shopping</button>
+                        <button class="btn text-white fw-bold py-2 flex-grow-1"
+                            style="background-color: #00B159; border-radius: 4px;"
+                            onclick="window.location.href='checkout.html'">Proceed to Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Success Modal -->
+    <div class="modal fade" id="orderSuccessModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg p-4">
+                <div class="modal-body text-center p-5">
+                    <div class="mb-4">
+                        <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    <h3 class="fw-bold mb-3">Order Placed Successfully!</h3>
+                    <p class="text-muted mb-4">Your order #SN-12345 has been placed and is being processed. You will receive a confirmation call shortly.</p>
+                    
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success py-3 fw-bold border-0" style="background-color: #00B159;" onclick="window.location.href='index.html'">CONTINUE SHOPPING</button>
+                        <button class="btn btn-outline-secondary py-3 fw-bold" onclick="window.location.href='purchase-history.html'">VIEW ORDER HISTORY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 12. OFF-CANVAS MENUS -->
+
+    <!-- Mobile Navigation Menu -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold">MENU</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="mb-4 d-lg-none">
+                <div class="search-box">
+                    <input type="text" placeholder="I am shopping for...">
+                    <i class="fas fa-search search-icon"></i>
+                </div>
+            </div>
+            <div class="d-md-none mb-4 p-3 bg-light rounded d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center gap-2">
+                    <i class="far fa-user text-muted"></i>
+                    <a href="login.html" class="text-dark text-decoration-none fw-bold small">Login</a>
+                </div>
+                <span class="text-muted">|</span>
+                <a href="registration.html" class="text-dark text-decoration-none fw-bold small">Registration</a>
+            </div>
+            <h6 class="fw-bold mb-3 text-success">Quick Links</h6>
+            <ul class="nav flex-column mb-4">
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="index.html">HOME</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html">BEAUTY &
+                        HEALTH</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html">FASHION &
+                        LIFESTYLE</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html">BABY FOOD &
+                        CARE</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html">FOOD</a></li>
+            </ul>
+            <h6 class="fw-bold mb-3 text-success">Categories</h6>
+            <ul class="nav flex-column">
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html"><i
+                            class="fas fa-angle-right me-2 text-muted"></i> Beauty & Health</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html"><i
+                            class="fas fa-angle-right me-2 text-muted"></i> Baby Food & Care</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html"><i
+                            class="fas fa-angle-right me-2 text-muted"></i> Organic Zone</a></li>
+                <li class="nav-item"><a class="nav-link text-dark py-2 border-bottom" href="category.html"><i
+                            class="fas fa-angle-right me-2 text-muted"></i> Food</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Right Side Cart Offcanvas -->
+    <div class="offcanvas offcanvas-end shadow-sm border-0" tabindex="-1" id="cartOffcanvas" style="width: 350px;">
+        <div class="offcanvas-header border-bottom py-3">
+            <h5 class="offcanvas-title fw-bold text-dark">Cart Items</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-4 d-flex flex-column">
+            <!-- Cart Item -->
+            <div class="d-flex align-items-start position-relative mb-4">
+                <img src="assets/skincare_1.png" alt="Product" class="img-fluid border rounded p-1 me-3"
+                    style="width: 60px; height: 60px; object-fit: contain;">
+                <div class="pe-4">
+                    <h6 class="fw-bold text-dark mb-2" style="font-size: 14px; line-height: 1.4;">The Ordinary Soothing
+                        & Barrier Support Serum...</h6>
+                    <span class="text-muted" style="font-size: 15px;">1x ৳5,200.00</span>
+                </div>
+                <button type="button" class="btn-close position-absolute top-50 end-0 translate-middle-y"
+                    aria-label="Close" style="font-size: 12px; opacity: 0.5;"></button>
+            </div>
+            <!-- Cart Footer -->
+            <div class="mt-auto border-top pt-4">
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-muted fw-bold">Subtotal</span>
+                    <span class="fw-bold text-dark">৳5,200.00</span>
+                </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-success py-3 fw-bold rounded-1 border-0" style="background-color: #00B159;"
+                        onclick="window.location.href='checkout.html'">PROCEED TO CHECKOUT</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 13. SCRIPTS SECTION -->
+
+    <!-- Core JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Slick Slider JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    <!-- Page Logic -->
+    <script>
+        $(document).ready(function () {
+            // Modal Quantity Controls
+            $('.btn-plus').off('click').on('click', function () {
+                let input = $(this).siblings('.qty-input');
+                let val = parseInt(input.val());
+                input.val(val + 1);
+                updateTotalPrice(input);
+            });
+
+            $('.btn-minus').off('click').on('click', function () {
+                let input = $(this).siblings('.qty-input');
+                let val = parseInt(input.val());
+                if (val > 1) {
+                    input.val(val - 1);
+                    updateTotalPrice(input);
+                }
+            });
+
+            function updateTotalPrice(input) {
+                let qty = parseInt(input.val());
+                let priceText = $('#quickViewModal .fs-4.fw-bold.text-success').first().text();
+                let price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+                let total = qty * price;
+                $('.total-price').text('৳' + total.toLocaleString() + '.00');
+                $('.total-price-success').text('৳' + total.toLocaleString() + '.00');
+            }
+        });
+
+        // Add to Cart Modal Trigger Function
+        function showAddToCartModal(name, img, price) {
+            $('#quickViewModal h5').text(name);
+            $('#quickViewModal .flex-grow-1 img').attr('src', img);
+            $('#quickViewModal .fs-4.fw-bold.text-success').first().text(price);
+            $('#quickViewModal .total-price').text(price);
+            $('#quickViewModal .qty-input').val(1);
+
+            $('#cartSuccessModal h6').text(name);
+            $('#cartSuccessModal img').attr('src', img);
+            $('#cartSuccessModal .total-price-success').text(price);
+
+            var myModal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+            myModal.show();
+        }
+
+        // Checkout Specific Logic
+        function showOrderSuccess() {
+            var myModal = new bootstrap.Modal(document.getElementById('orderSuccessModal'));
+            myModal.show();
+        }
+
+        let selectedPaymentMethod = 'cod';
+        let paymentType = 'full';
+
+        function selectNewPayment(method, element) {
+            // UI Update
+            $('.method-card').removeClass('active');
+            $(element).addClass('active');
+            
+            selectedPaymentMethod = method;
+            
+            if (method === 'cod') {
+                $('#paymentDetailsSection').hide();
+            } else {
+                $('#paymentDetailsSection').show();
+                // Update merchant number based on method
+                if (method === 'rocket') {
+                    $('#merchantNumber').text('01835522503-0');
+                } else {
+                    $('#merchantNumber').text('01835522503');
+                }
+                
+                // Update placeholder based on method
+                $('#senderNumber').attr('placeholder', 'e.g. your ' + method + ' number');
+            }
+        }
+
+        function togglePayAmount(type, btn) {
+            paymentType = type;
+            $('.pay-type-btn').removeClass('active');
+            $(btn).addClass('active');
+            
+            if (type === 'full') {
+                $('#dynamicAmount').text('৳5,260.00');
+            } else {
+                $('#dynamicAmount').text('৳60.00');
+            }
+        }
+
+        function copyNumber() {
+            const num = $('#merchantNumber').text();
+            navigator.clipboard.writeText(num);
+            alert('Number copied to clipboard!');
+        }
+
+        function applyCoupon() {
+            const code = $('#couponCode').val().trim();
+            const message = $('#couponMessage');
+            
+            if (code.toUpperCase() === 'SNTRADE10') {
+                message.show().removeClass('text-danger').addClass('text-success fw-bold')
+                       .html('<i class="fas fa-check-circle me-1"></i> Coupon "SNTRADE10" applied! You saved ৳526.00');
+            } else if (code === '') {
+                message.hide();
+            } else {
+                message.show().removeClass('text-success').addClass('text-danger fw-bold')
+                       .html('<i class="fas fa-exclamation-circle me-1"></i> Invalid coupon code.');
+            }
+        }
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
